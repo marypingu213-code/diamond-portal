@@ -5,15 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Diamond 老師的遊戲大廳</title>
     <style>
-        /* 使用圓潤的粉圓體字型 */
+        /* 使用圓潤的粉圓體字型，對學生更具親和力 */
         body { 
             font-family: "jf-open-huninn", "Microsoft JhengHei", sans-serif; 
             padding: 20px; 
-            background-color: #f0f4f8; /* 換一個清爽的藍色調背景，區隔妳的大廳 */
+            background-color: #f0f4f8; /* 清爽的藍色調背景 */
             color: #444;
             text-align: center;
         }
         
+        /* 時光布告欄 */
         #clock-container {
             background-color: #ffffff;
             border: 3px dashed #64b5f6;
@@ -26,6 +27,7 @@
         #date-display { font-size: 1.3rem; color: #666; margin-bottom: 5px; }
         #time-display { font-size: 2.8rem; color: #1e88e5; font-weight: bold; }
 
+        /* 隨機鼓勵語區塊 */
         #encouragement-text {
             font-size: 1.6rem;
             color: #1976d2;
@@ -36,6 +38,7 @@
 
         h1 { color: #1565c0; font-size: 2.5em; margin-bottom: 30px; letter-spacing: 2px; }
         
+        /* 遊戲卡片佈局 */
         .grid { 
             display: grid; 
             grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
@@ -82,6 +85,7 @@
         </div>
 
     <script>
+        // 1. 更新日期與時間
         function updateClock() {
             const now = new Date();
             const dateOptions = { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' };
@@ -91,6 +95,7 @@
         setInterval(updateClock, 1000);
         updateClock();
 
+        // 2. 隨機鼓勵語
         const magicPhrases = [
             "✨ 今天的你，也會有超棒的表現喔！",
             "🌟 準備好挑戰 Diamond 老師設計的遊戲了嗎？",
@@ -103,13 +108,14 @@
         }
         showRandomPhrase();
 
+        // 3. 抓取 GitHub 專案
         async function fetchDiamondProjects() {
-            const username = 'marypingu213-code'; // 依舊是妳的帳號
+            const username = 'marypingu213-code'; // 託管於妳的帳號
             const container = document.getElementById('project-list');
             
-            // 定義 Diamond 老師的專案清單
-            const diamondRepos = ['grade-3-web', 'RICHMAN3'];
-            const cardColors = ['#E3F2FD', '#E8EAF6'];
+            // --- 更新：Diamond 老師的所有專案清單 ---
+            const diamondRepos = ['grade-3-web', 'RICHMAN3', 'G5-diamond', 'vacab-3', 'G3-diamond'];
+            const cardColors = ['#E3F2FD', '#E8EAF6', '#E0F2F1', '#F3E5F5', '#FFF3E0'];
 
             try {
                 const response = await fetch(`https://api.github.com/users/${username}/repos`);
@@ -117,16 +123,16 @@
                 
                 let foundCount = 0;
                 repos.forEach((repo) => {
-                    // 只顯示在 Diamond 清單中的專案
+                    // 只顯示屬於 Diamond 老師的專案
                     if (diamondRepos.includes(repo.name)) { 
                         const link = `https://${username}.github.io/${repo.name}`;
-                        const color = cardColors[foundCount % cardColors.colors];
+                        const color = cardColors[foundCount % cardColors.length];
                         
                         const card = document.createElement('a');
                         card.href = link;
                         card.className = 'card';
                         card.target = '_blank';
-                        card.style.backgroundColor = color || '#ffffff';
+                        card.style.backgroundColor = color;
                         card.innerHTML = `
                             <span class="emoji">💎</span>
                             <h3>${repo.name}</h3>
