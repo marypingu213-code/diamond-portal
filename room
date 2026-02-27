@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diamond 老師的遊戲大廳</title>
+    <style>
+        /* 使用圓潤的粉圓體字型 */
+        body { 
+            font-family: "jf-open-huninn", "Microsoft JhengHei", sans-serif; 
+            padding: 20px; 
+            background-color: #f0f4f8; /* 換一個清爽的藍色調背景，區隔妳的大廳 */
+            color: #444;
+            text-align: center;
+        }
+        
+        #clock-container {
+            background-color: #ffffff;
+            border: 3px dashed #64b5f6;
+            border-radius: 20px;
+            display: inline-block;
+            padding: 15px 40px;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+        #date-display { font-size: 1.3rem; color: #666; margin-bottom: 5px; }
+        #time-display { font-size: 2.8rem; color: #1e88e5; font-weight: bold; }
+
+        #encouragement-text {
+            font-size: 1.6rem;
+            color: #1976d2;
+            font-weight: bold;
+            margin-bottom: 40px;
+            min-height: 1.8em;
+        }
+
+        h1 { color: #1565c0; font-size: 2.5em; margin-bottom: 30px; letter-spacing: 2px; }
+        
+        .grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); 
+            gap: 25px; 
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .card { 
+            display: block;
+            padding: 40px 20px; 
+            border-radius: 25px; 
+            text-decoration: none; 
+            color: #333;
+            background-color: white;
+            box-shadow: 0 6px 15px rgba(0,0,0,0.05);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 4px solid white;
+            text-align: center;
+        }
+
+        .card:hover { 
+            transform: scale(1.05) rotate(-2deg); 
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        .emoji { font-size: 4.5em; display: block; margin-bottom: 15px; }
+        .card h3 { margin: 10px 0; font-size: 1.5em; color: #222; }
+        .card p { font-size: 1.05em; color: #666; margin: 0; }
+    </style>
+</head>
+<body>
+
+    <div id="clock-container">
+        <div id="date-display">正在載入日期...</div>
+        <div id="time-display">00:00:00</div>
+    </div>
+
+    <div id="encouragement-text">✨ 歡迎來到 Diamond 老師的學習空間！ ✨</div>
+
+    <h1>💎 Diamond 老師的遊戲大廳 💎</h1>
+    
+    <div id="project-list" class="grid">
+        </div>
+
+    <script>
+        function updateClock() {
+            const now = new Date();
+            const dateOptions = { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' };
+            document.getElementById('date-display').innerText = now.toLocaleDateString('zh-TW', dateOptions);
+            document.getElementById('time-display').innerText = now.toLocaleTimeString('zh-TW', { hour12: false });
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        const magicPhrases = [
+            "✨ 今天的你，也會有超棒的表現喔！",
+            "🌟 準備好挑戰 Diamond 老師設計的遊戲了嗎？",
+            "💪 每一次練習，都在讓自己變得更厲害！",
+            "🌈 保持專注，你一定可以做得到的！"
+        ];
+        function showRandomPhrase() {
+            const phraseElement = document.getElementById('encouragement-text');
+            phraseElement.innerText = magicPhrases[Math.floor(Math.random() * magicPhrases.length)];
+        }
+        showRandomPhrase();
+
+        async function fetchDiamondProjects() {
+            const username = 'marypingu213-code'; // 依舊是妳的帳號
+            const container = document.getElementById('project-list');
+            
+            // 定義 Diamond 老師的專案清單
+            const diamondRepos = ['grade-3-web', 'RICHMAN3'];
+            const cardColors = ['#E3F2FD', '#E8EAF6'];
+
+            try {
+                const response = await fetch(`https://api.github.com/users/${username}/repos`);
+                const repos = await response.json();
+                
+                let foundCount = 0;
+                repos.forEach((repo) => {
+                    // 只顯示在 Diamond 清單中的專案
+                    if (diamondRepos.includes(repo.name)) { 
+                        const link = `https://${username}.github.io/${repo.name}`;
+                        const color = cardColors[foundCount % cardColors.colors];
+                        
+                        const card = document.createElement('a');
+                        card.href = link;
+                        card.className = 'card';
+                        card.target = '_blank';
+                        card.style.backgroundColor = color || '#ffffff';
+                        card.innerHTML = `
+                            <span class="emoji">💎</span>
+                            <h3>${repo.name}</h3>
+                            <p>點擊開始 Diamond 老師的課程</p>
+                        `;
+                        container.appendChild(card);
+                        foundCount++;
+                    }
+                });
+            } catch (error) {
+                console.error('抓取失敗:', error);
+            }
+        }
+
+        fetchDiamondProjects();
+    </script>
+</body>
+</html>
