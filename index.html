@@ -5,93 +5,131 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Diamond 老師的遊戲大廳</title>
     <style>
+        /* 滿版背景與舒適的四周留白 */
         body { 
             font-family: "jf-open-huninn", "Microsoft JhengHei", sans-serif; 
-            padding: 10px 20px; 
+            margin: 0;
+            padding: 3vh 3vw; 
             background-color: #f0f4f8; 
             color: #444;
-            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            box-sizing: border-box;
         }
         
-        /* 緊湊型標頭配置 */
+        /* 旗艦大廳主容器：放寬到 1600px */
+        .main-container {
+            width: 100%;
+            max-width: 1600px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex-grow: 1;
+        }
+        
+        /* 頂部資訊看板：巨大化、滿版延伸 */
         .header-container {
             display: flex;
             align-items: center;
             justify-content: center;
-            gap: 20px;
+            gap: 40px;
             background-color: #ffffff;
-            border: 3px dashed #64b5f6;
-            border-radius: 20px;
-            padding: 10px 30px;
-            margin: 0 auto 20px auto;
-            max-width: 1100px;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            border: 4px dashed #64b5f6;
+            border-radius: 30px;
+            padding: 20px 40px;
+            margin: 0 auto 40px auto;
+            width: 100%;
+            max-width: 1400px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+            box-sizing: border-box;
         }
 
-        #clock-box { text-align: left; border-right: 2px solid #eee; padding-right: 20px; }
-        #date-display { font-size: 1rem; color: #666; }
-        #time-display { font-size: 2rem; color: #1e88e5; font-weight: bold; line-height: 1; }
+        #clock-box { 
+            text-align: left; 
+            border-right: 3px solid #eee; 
+            padding-right: 40px; 
+        }
+        #date-display { font-size: clamp(18px, 1.5vw, 24px); color: #666; font-weight: bold; margin-bottom: 5px;}
+        #time-display { font-size: clamp(36px, 3.5vw, 60px); color: #1e88e5; font-weight: bold; line-height: 1; }
 
         #encouragement-text {
-            font-size: 1.3rem;
+            font-size: clamp(24px, 2.5vw, 40px);
             color: #1976d2;
             font-weight: bold;
             flex: 1;
             text-align: left;
         }
 
-        h1 { color: #1565c0; font-size: 1.8em; margin: 10px 0 20px 0; letter-spacing: 2px; }
+        h1 { 
+            color: #1565c0; 
+            font-size: clamp(36px, 3.5vw, 60px); 
+            margin: 10px 0 40px 0; 
+            letter-spacing: 3px; 
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
         
+        /* 網格系統自動展開：按鈕變超大 */
         .grid { 
             display: grid; 
-            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); 
-            gap: 20px; 
-            max-width: 1200px;
-            margin: 0 auto;
+            /* 每張卡片至少 320px 寬，自動排滿 */
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); 
+            gap: 40px; 
+            width: 100%; 
         }
 
+        /* 巨無霸卡片 */
         .card { 
-            display: block;
-            padding: 30px 15px; 
-            border-radius: 25px; 
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 50px 20px; 
+            border-radius: 35px; 
             text-decoration: none; 
-            color: #333;
             background-color: white;
-            box-shadow: 0 5px 12px rgba(0,0,0,0.05);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.06);
             transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            border: 4px solid white;
+            border: 6px solid transparent;
+            min-height: 280px; /* 卡片長高 */
+            box-sizing: border-box;
         }
 
         .card:hover { 
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(30, 136, 229, 0.15);
+            transform: translateY(-12px);
+            box-shadow: 0 20px 40px rgba(30, 136, 229, 0.15);
             border-color: #bbdefb;
+            background-color: #f8fbff;
         }
 
-        .emoji { font-size: 4em; display: block; margin-bottom: 10px; }
-        .card h3 { margin: 5px 0; font-size: 1.5em; color: #1565c0; }
-        .card p { font-size: 1rem; color: #78909c; margin: 0; font-weight: bold; }
+        .emoji { font-size: clamp(80px, 8vw, 140px); display: block; margin-bottom: 20px; }
+        .card h3 { margin: 0 0 15px 0; font-size: clamp(28px, 2.5vw, 40px); color: #1565c0; }
+        .card p { font-size: clamp(18px, 1.5vw, 24px); color: #78909c; margin: 0; font-weight: bold; }
 
-        @media (max-width: 850px) {
-            .header-container { flex-direction: column; gap: 10px; }
-            #clock-box { border-right: none; padding-right: 0; text-align: center; }
+        @media (max-width: 900px) {
+            .header-container { flex-direction: column; gap: 20px; padding: 20px; text-align: center;}
+            #clock-box { border-right: none; padding-right: 0; border-bottom: 2px solid #eee; padding-bottom: 20px;}
             #encouragement-text { text-align: center; }
+            .card { min-height: 200px; padding: 30px 15px; }
         }
     </style>
 </head>
 <body>
 
-    <div class="header-container">
-        <div id="clock-box">
-            <div id="date-display">載入中...</div>
-            <div id="time-display">00:00:00</div>
+    <div class="main-container">
+        <div class="header-container">
+            <div id="clock-box">
+                <div id="date-display">載入中...</div>
+                <div id="time-display">00:00:00</div>
+            </div>
+            <div id="encouragement-text">✨ 準備好要開始學習了嗎？ ✨</div>
         </div>
-        <div id="encouragement-text">✨ 準備好要開始學習了嗎？ ✨</div>
-    </div>
 
-    <h1>💎 Diamond 老師的國語遊戲大廳 💎</h1>
-    
-    <div id="project-list" class="grid"></div>
+        <h1>💎 Diamond 老師的國語遊戲大廳 💎</h1>
+        
+        <div id="project-list" class="grid"></div>
+    </div>
 
     <script>
         function updateClock() {
@@ -115,7 +153,7 @@
         }
         showRandomPhrase();
 
-        // 課程資訊對照表 (統一為國語網頁)
+        // 課程資訊對照表
         const projectInfo = {
             'G3-diamond': { title: '三年級國語', desc: '有趣的語文練習', filter: 'hue-rotate(0deg)' },
             'G5-diamond': { title: '五年級國語', desc: '高年級挑戰賽', filter: 'hue-rotate(190deg)' },
@@ -140,7 +178,7 @@
                         const card = document.createElement('a');
                         card.href = link;
                         card.className = 'card';
-                        card.target = '_blank';
+                        card.target = '_blank'; // 點擊會開新分頁
                         card.innerHTML = `
                             <span class="emoji" style="filter: ${info.filter}">💎</span>
                             <h3>${info.title}</h3>
