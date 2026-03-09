@@ -5,22 +5,114 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Diamond 老師的遊戲大廳</title>
     <style>
-        /* 保持原本精美的 CSS 設定 */
-        body { font-family: "jf-open-huninn", "Microsoft JhengHei", sans-serif; margin: 0; padding: 3vh 3vw; background-color: #f0f4f8; color: #444; display: flex; flex-direction: column; align-items: center; min-height: 100vh; box-sizing: border-box; }
-        .main-container { width: 100%; max-width: 1600px; display: flex; flex-direction: column; align-items: center; flex-grow: 1; }
-        .header-container { display: flex; align-items: center; justify-content: center; gap: 40px; background-color: #ffffff; border: 4px dashed #64b5f6; border-radius: 30px; padding: 20px 40px; margin: 0 auto 40px auto; width: 100%; max-width: 1400px; box-shadow: 0 8px 20px rgba(0,0,0,0.05); box-sizing: border-box; }
-        #clock-box { text-align: left; border-right: 3px solid #eee; padding-right: 40px; }
+        /* 滿版背景與舒適的四周留白 */
+        body { 
+            font-family: "jf-open-huninn", "Microsoft JhengHei", sans-serif; 
+            margin: 0;
+            padding: 3vh 3vw; 
+            background-color: #f0f4f8; 
+            color: #444;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            box-sizing: border-box;
+        }
+        
+        /* 旗艦大廳主容器：放寬到 1600px */
+        .main-container {
+            width: 100%;
+            max-width: 1600px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex-grow: 1;
+        }
+        
+        /* 頂部資訊看板：巨大化、滿版延伸 */
+        .header-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 40px;
+            background-color: #ffffff;
+            border: 4px dashed #64b5f6;
+            border-radius: 30px;
+            padding: 20px 40px;
+            margin: 0 auto 40px auto;
+            width: 100%;
+            max-width: 1400px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.05);
+            box-sizing: border-box;
+        }
+
+        #clock-box { 
+            text-align: left; 
+            border-right: 3px solid #eee; 
+            padding-right: 40px; 
+        }
         #date-display { font-size: clamp(18px, 1.5vw, 24px); color: #666; font-weight: bold; margin-bottom: 5px;}
         #time-display { font-size: clamp(36px, 3.5vw, 60px); color: #1e88e5; font-weight: bold; line-height: 1; }
-        #encouragement-text { font-size: clamp(24px, 2.5vw, 40px); color: #1976d2; font-weight: bold; flex: 1; text-align: left; }
-        h1 { color: #1565c0; font-size: clamp(36px, 3.5vw, 60px); margin: 10px 0 40px 0; letter-spacing: 3px; text-shadow: 2px 2px 4px rgba(0,0,0,0.1); }
-        .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 40px; width: 100%; }
-        .card { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 50px 20px; border-radius: 35px; text-decoration: none; background-color: white; box-shadow: 0 10px 20px rgba(0,0,0,0.06); transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275); border: 6px solid transparent; min-height: 280px; box-sizing: border-box; }
-        .card:hover { transform: translateY(-12px); box-shadow: 0 20px 40px rgba(30, 136, 229, 0.15); border-color: #bbdefb; background-color: #f8fbff; }
+
+        #encouragement-text {
+            font-size: clamp(24px, 2.5vw, 40px);
+            color: #1976d2;
+            font-weight: bold;
+            flex: 1;
+            text-align: left;
+        }
+
+        h1 { 
+            color: #1565c0; 
+            font-size: clamp(36px, 3.5vw, 60px); 
+            margin: 10px 0 40px 0; 
+            letter-spacing: 3px; 
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+        
+        /* 網格系統自動展開：按鈕變超大 */
+        .grid { 
+            display: grid; 
+            /* 每張卡片至少 320px 寬，自動排滿 */
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); 
+            gap: 40px; 
+            width: 100%; 
+        }
+
+        /* 巨無霸卡片 */
+        .card { 
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 50px 20px; 
+            border-radius: 35px; 
+            text-decoration: none; 
+            background-color: white;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.06);
+            transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            border: 6px solid transparent;
+            min-height: 280px;
+            box-sizing: border-box;
+        }
+
+        .card:hover { 
+            transform: translateY(-12px);
+            box-shadow: 0 20px 40px rgba(30, 136, 229, 0.15);
+            border-color: #bbdefb;
+            background-color: #f8fbff;
+        }
+
         .emoji { font-size: clamp(80px, 8vw, 140px); display: block; margin-bottom: 20px; }
         .card h3 { margin: 0 0 15px 0; font-size: clamp(28px, 2.5vw, 40px); color: #1565c0; }
         .card p { font-size: clamp(18px, 1.5vw, 24px); color: #78909c; margin: 0; font-weight: bold; }
-        @media (max-width: 900px) { .header-container { flex-direction: column; gap: 20px; padding: 20px; text-align: center;} #clock-box { border-right: none; padding-right: 0; border-bottom: 2px solid #eee; padding-bottom: 20px;} #encouragement-text { text-align: center; } .card { min-height: 200px; padding: 30px 15px; } }
+
+        @media (max-width: 900px) {
+            .header-container { flex-direction: column; gap: 20px; padding: 20px; text-align: center;}
+            #clock-box { border-right: none; padding-right: 0; border-bottom: 2px solid #eee; padding-bottom: 20px;}
+            #encouragement-text { text-align: center; }
+            .card { min-height: 200px; padding: 30px 15px; }
+        }
     </style>
 </head>
 <body>
@@ -40,7 +132,6 @@
     </div>
 
     <script>
-        // 1. 更新時鐘
         function updateClock() {
             const now = new Date();
             const dateOptions = { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' };
@@ -50,7 +141,6 @@
         setInterval(updateClock, 1000);
         updateClock();
 
-        // 2. 顯示隨機鼓勵話語
         function showRandomPhrase() {
             const phrases = [
                 "✨ 今天的你，也會有超棒的表現喔！", 
@@ -63,68 +153,43 @@
         }
         showRandomPhrase();
 
-        // 3. 課程資訊對照表 (已加入 grade-3-game)
+        // 🌟🌟🌟 這裡就是魔法發生的位置 🌟🌟🌟
+        // 我在這裡加入了您剛剛上傳的 'grade-3-game'
         const projectInfo = {
-            'G3-diamond': { title: '三年級國語', desc: '有趣的語文練習', filter: 'hue-rotate(0deg)' },
-            'grade-3-game': { title: '語詞拉霸機', desc: '超刺激線上搶答', filter: 'hue-rotate(90deg)' }, // 新增
+            'grade-3-game': { title: '三年級特教國語', desc: '全新四大關卡挑戰', filter: 'hue-rotate(330deg)' }, // 🌟 新增的這行！粉紫鑽石！
+            'G3-diamond': { title: '三年級國語(舊)', desc: '有趣的語文練習', filter: 'hue-rotate(0deg)' },
             'G5-diamond': { title: '五年級國語', desc: '高年級挑戰賽', filter: 'hue-rotate(190deg)' },
-            'RICHMAN3': { title: '大富翁遊戲', desc: '誰來搶答', filter: 'hue-rotate(280deg)' }
+            'grade-3-web': { title: '語詞翻翻樂', desc: '大家一起動動腦', filter: 'hue-rotate(45deg)' },
+            'RICHMAN3': { title: '大富翁遊戲', desc: '誰來搶答', filter: 'hue-rotate(280deg)' },
+            'vacab-3': { title: '字彙小學堂', desc: '認識更多新單字', filter: 'hue-rotate(100deg)' }
         };
 
-        // 4. 生成卡片的函數
-        function createCard(repoName) {
-            const info = projectInfo[repoName];
-            const username = 'marypingu213-code';
-            const link = `https://${username}.github.io/${repoName}`;
-            
-            const card = document.createElement('a');
-            card.href = link;
-            card.className = 'card';
-            card.target = '_blank';
-            card.innerHTML = `
-                <span class="emoji" style="filter: ${info.filter}">💎</span>
-                <h3>${info.title}</h3>
-                <p>${info.desc}</p>
-            `;
-            return card;
-        }
-
-        // 5. 抓取 GitHub 專案並顯示
         async function fetchDiamondProjects() {
             const username = 'marypingu213-code';
             const container = document.getElementById('project-list');
             
             try {
                 const response = await fetch(`https://api.github.com/users/${username}/repos`);
-                if (!response.ok) throw new Error('Network response was not ok');
-                
                 const repos = await response.json();
                 
-                // 檢查抓回來的 Repo 是否在我們的清單中
-                let foundAny = false;
                 repos.forEach((repo) => {
                     if (projectInfo[repo.name]) {
-                        container.appendChild(createCard(repo.name));
-                        foundAny = true;
+                        const info = projectInfo[repo.name];
+                        const link = `https://${username}.github.io/${repo.name}/`;
+                        
+                        const card = document.createElement('a');
+                        card.href = link;
+                        card.className = 'card';
+                        card.target = '_blank'; // 點擊會開新分頁
+                        card.innerHTML = `
+                            <span class="emoji" style="filter: ${info.filter}">💎</span>
+                            <h3>${info.title}</h3>
+                            <p>${info.desc}</p>
+                        `;
+                        container.appendChild(card);
                     }
                 });
-
-                // 如果 API 抓到了，但沒對應到（或是 Repo 被刪了），改用靜態渲染
-                if (!foundAny) renderStaticCards();
-
-            } catch (error) { 
-                console.error('抓取失敗，切換至靜態模式:', error); 
-                renderStaticCards(); // 萬一 GitHub API 壞了，直接手動生卡片
-            }
-        }
-
-        // 靜態渲染函數：確保版面不空白
-        function renderStaticCards() {
-            const container = document.getElementById('project-list');
-            container.innerHTML = ''; // 清空
-            Object.keys(projectInfo).forEach(name => {
-                container.appendChild(createCard(name));
-            });
+            } catch (error) { console.error('抓取失敗:', error); }
         }
 
         fetchDiamondProjects();
