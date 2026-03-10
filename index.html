@@ -67,14 +67,14 @@
             text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
         }
         
-        /* 🌟 完美的 3+2 網格排版 */
+        /* 🌟 自動適應網格：6 個專案會呈現 3+3 排列 */
         .grid { 
             display: flex; 
             flex-wrap: wrap;
-            justify-content: center; /* 讓最後一排自動置中 */
+            justify-content: center; 
             gap: 40px; 
             width: 100%;
-            max-width: 1300px; /* 限制寬度，確保第一排只能放 3 個 (卡片寬350px + 間距40px) */
+            max-width: 1300px; 
         }
 
         .card { 
@@ -90,7 +90,6 @@
             transition: all 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             border: 6px solid transparent;
             min-height: 280px;
-            /* 固定每張卡片的寬度，配合 flex-wrap 達成上 3 下 2 */
             width: 350px; 
             box-sizing: border-box;
         }
@@ -106,7 +105,6 @@
         .card h3 { margin: 0 0 15px 0; font-size: clamp(28px, 2.5vw, 40px); color: #1565c0; }
         .card p { font-size: clamp(18px, 1.5vw, 24px); color: #78909c; margin: 0; font-weight: bold; }
 
-        /* 手機或窄螢幕時自動縮小卡片並變成單欄或雙欄 */
         @media (max-width: 1200px) {
             .card { width: 300px; min-height: 250px; }
         }
@@ -129,7 +127,7 @@
             <div id="encouragement-text">✨ 準備好要開始學習了嗎？ ✨</div>
         </div>
 
-        <h1>💎 Diamond 老師的國語遊戲大廳 💎</h1>
+        <h1>💎 Diamond 老師的遊戲大廳 💎</h1>
         
         <div id="project-list" class="grid"></div>
     </div>
@@ -156,20 +154,22 @@
         }
         showRandomPhrase();
 
-        // 🌟 更新後的 5 個專案清單 (移除了語詞翻翻樂，修改了名稱)
+        // 🌟 專案資料設定 (包含新加入的數學專區)
         const projectInfo = {
             'G3-diamond': { title: '三年級國語', desc: '有趣的語文練習', filter: 'hue-rotate(0deg)' },
             'G5-diamond': { title: '五年級國語', desc: '高年級挑戰賽', filter: 'hue-rotate(190deg)' },
             'grade-3-game': { title: '無拘拉霸機', desc: '全新關卡挑戰', filter: 'hue-rotate(330deg)' }, 
+            'diamond-math': { title: '數學專區', desc: '邏輯與運算挑戰', filter: 'hue-rotate(240deg)' }, // 藍紫色鑽石
             'RICHMAN3': { title: '大富翁遊戲', desc: '誰來搶答', filter: 'hue-rotate(280deg)' },
             'vacab-3': { title: '字彙小學堂', desc: '認識更多新單字', filter: 'hue-rotate(100deg)' }
         };
 
-        // 🌟 為了確保畫面完美呈現「上3下2」，我們指定陣列的渲染順序
+        // 🌟 渲染順序：3+3 排列
         const orderedProjects = [
             'G3-diamond', 
             'G5-diamond', 
             'grade-3-game', 
+            'diamond-math', 
             'RICHMAN3', 
             'vacab-3'
         ];
@@ -179,14 +179,10 @@
             const container = document.getElementById('project-list');
             
             try {
-                // 從 Github API 抓取您的專案列表
                 const response = await fetch(`https://api.github.com/users/${username}/repos`);
                 const repos = await response.json();
-                
-                // 為了讓卡片照我們想要的順序排，先過濾出在 GitHub 上確實存在的專案
                 const validRepos = repos.map(r => r.name);
 
-                // 依照我們自訂的順序 (orderedProjects) 來渲染卡片
                 orderedProjects.forEach((repoName) => {
                     if (validRepos.includes(repoName) && projectInfo[repoName]) {
                         const info = projectInfo[repoName];
